@@ -1,34 +1,35 @@
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+
+dotenv.config(); // load .env
+
 const { Schema } = mongoose;
 
-
 async function main() {
-    mongoose.connect("mongodb+srv://ManishaYadav10104:Manisha%4010104@manisha10104.qemkidy.mongodb.net/Bookstore");
+    await mongoose.connect(process.env.MONGO_URI);
 
     const userSchema = new Schema({
         name: String,
-        age: Number,    
+        age: Number,
         city: String,
         gender: String
-    })
+    });
 
-// model ko create krna
-const User= mongoose.model('User', userSchema);
-const User1 = new User({ name: "saloni", age: 18, city: "Delhi", gender: "Female" });
-await User1.save();
+    // model create
+    const User = mongoose.model('User', userSchema);
 
+    await User.create({ name: "saloni", age: 18, city: "Delhi", gender: "Female" });
+    await User.create({ name: "Manisha", age: 20, city: "Noida", gender: "Female" });
 
-await User.create({ name: "Manisha", age: 20, city: "Noida", gender: "Female" });
+    await User.insertMany([
+        { name: "Rohit", age: 22, city: "Mumbai", gender: "Male" },
+        { name: "Anjali", age: 19, city: "Bangalore", gender: "Female" },
+        { name: "Amit", age: 25, city: "Chennai", gender: "Male" }
+    ]);
 
-
-
-await User.insertMany([
-    { name: "Rohit", age: 22, city: "Mumbai", gender: "Male" },
-    { name: "Anjali", age: 19, city : "Bangalore", gender: "Female" },
-    { name: "Amit", age: 25, city: "Chennai", gender: " Male" }
-]);
+    console.log("Data inserted successfully");
 }
 
 main()
-.then(() => console.log('Connected successfully to server'))
-.catch(err => console.error('Connection error', err));
+    .then(() => console.log("Connected successfully to MongoDB"))
+    .catch(err => console.error("Connection error:", err));
