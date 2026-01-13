@@ -1,10 +1,8 @@
-const mongoose = require('mongoose');
+import { MongoClient } from "mongodb";
+import dotenv from "dotenv";
 
-async function main() {
-    // await mongoose.connect("
-    
-      await  mongoose.connect("mongodb+srv://ManishaYadav10104:Manisha%4010104@manisha10104.qemkidy.mongodb.net/Instagram");
-}
+dotenv.config();
 
+const client = new MongoClient(process.env.MONGO_URI);
 
-module.exports = main;
+export default client;
